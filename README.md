@@ -33,11 +33,11 @@ This is a Quiz Maker application built with Next.js, Tailwind CSS, and Supabase.
 
 5. Open http://localhost:3000 in your browser to view the application.
 
-# Deployment
+## Deployment
 
 - Deploy the application to Vercel by following the instructions at vercel.com.
 
-# Features
+## Features
 
 - User authentication with email/password
 - Quiz creation and management
