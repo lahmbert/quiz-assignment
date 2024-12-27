@@ -57,7 +57,7 @@ export default function Regiter() {
                   type="r-password"
                   name="r-password"
                   id="r-password"
-                  placeholder="Input your r-password!"
+                  placeholder="Input your password again!"
                 />
               </div>
               <div className="flex items-center gap-1 px-4">
