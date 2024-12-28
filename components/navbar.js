@@ -1,17 +1,37 @@
 'use client';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function Navbar({ isOpenBars, setIsOpenBars }) {
   const router = useRouter();
+  const [user, setUser] = useState(null);
 
+  // Check user authentication status
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+    };
+
+    fetchUser();
+  }, []);
+
+  // Handle toggle of navbar on small screens
   const handleOpenBars = () => {
     setIsOpenBars(!isOpenBars);
   };
 
-  const handleLogin = () => {
-    router.push('/login');
+  // Handle login or logout
+  const handleLoginLogout = async () => {
+    if (user) {
+      await supabase.auth.signOut(); // Sign out if user is logged in
+      setUser(null); // Update local state to reflect logged out status
+    } else {
+      router.push('/login'); // Redirect to login if not logged in
+    }
   };
 
   return (
@@ -27,10 +47,10 @@ export default function Navbar({ isOpenBars, setIsOpenBars }) {
           <div className="cursor-pointer">Manage Quiz</div>
           <div>
             <button
-              onClick={handleLogin}
+              onClick={handleLoginLogout}
               className="bg-gradient-to-tl rounded-full shadow-md hover:-translate-y-1 duration-300 from-green-500 to-lime-500 p-2 px-4"
             >
-              Sign In
+              {user ? 'Sign Out' : 'Sign In'}
             </button>
           </div>
         </div>
@@ -50,10 +70,10 @@ export default function Navbar({ isOpenBars, setIsOpenBars }) {
         <div className="cursor-pointer">Manage Quiz</div>
         <div className="w-full text-center pt-2">
           <button
-            onClick={handleLogin}
+            onClick={handleLoginLogout}
             className="p-2 bg-gradient-to-tl w-[50%] duration-300 hover:-translate-y-1 rounded-full from-green-500 to-lime-500"
           >
-            Sign In
+            {user ? 'Sign Out' : 'Sign In'}
           </button>
         </div>
       </div>

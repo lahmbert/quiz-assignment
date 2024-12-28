@@ -1,12 +1,39 @@
 'use client';
 
+import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function Login() {
-  const route = useRouter();
-  const handleRegister = () => {
-    route.push('/register');
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleLoginUser = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      setErrorMessage('Please fill in both email and password.');
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setErrorMessage('Login failed: ' + error.message);
+    } else {
+      router.push('/'); // Ganti ke halaman yang sesuai
+    }
   };
+
+  const handleRegister = () => {
+    router.push('/register');
+  };
+
   return (
     <div>
       <div className="mt-[5rem] text-center justify-items-center">
@@ -14,15 +41,20 @@ export default function Login() {
           <div className="sm:flex hidden w-[30rem] justify-center justify-items-center items-center">
             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" />
           </div>
-          <div className="flex sm:w-[20rem]  flex-col">
+          <div className="flex sm:w-[20rem] flex-col">
             <div className="pb-8">
               <span className="text-2xl font-semibold">Logo</span>
               <p className="text-sm py-1">Silahkan Login untuk Memulai!</p>
             </div>
-            <form className="flex flex-col gap-6 text-start text-sm">
+            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+            <form
+              onSubmit={handleLoginUser}
+              className="flex flex-col gap-6 text-start text-sm"
+            >
               <div className="flex flex-col">
                 <label htmlFor="email">Email</label>
                 <input
+                  onChange={(e) => setEmail(e.target.value)}
                   className="ml-1 mt-2 p-1 border border-slate-400 focus:outline-none rounded-sm"
                   type="email"
                   name="email"
@@ -33,11 +65,13 @@ export default function Login() {
               <div className="flex flex-col">
                 <label htmlFor="password">Password</label>
                 <input
+                  onChange={(e) => setPassword(e.target.value)}
                   className="ml-1 mt-2 p-1 border border-slate-400 focus:outline-none rounded-sm"
                   type="password"
                   name="password"
                   id="password"
                   placeholder="Input your password!"
+                  required
                 />
               </div>
               <div className="flex justify-between gap-3 px-3">
@@ -52,7 +86,10 @@ export default function Login() {
                 </div>
               </div>
               <div className="py-2">
-                <button className="uppercase font-bold duration-300 text-slate-100 hover:-translate-y-1 p-2 w-full bg-gradient-to-tl from-green-500 to-lime-500 shadow-md rounded-sm">
+                <button
+                  type="submit"
+                  className="uppercase font-bold duration-300 text-slate-100 hover:-translate-y-1 p-2 w-full bg-gradient-to-tl from-green-500 to-lime-500 shadow-md rounded-sm"
+                >
                   Sign In
                 </button>
               </div>

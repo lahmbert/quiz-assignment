@@ -2,13 +2,11 @@
 import { useState } from 'react'; // Import useState
 import Navbar from '@/components/navbar';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Home() {
+  useAuth();
   const [isOpenBars, setIsOpenBars] = useState(false); // Declare state here
-
-  const handleOpenBars = () => {
-    setIsOpenBars(!isOpenBars); // Toggle state
-  };
 
   const route = useRouter();
   const handleLogin = () => {
