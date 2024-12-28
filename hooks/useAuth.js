@@ -12,6 +12,8 @@ export const useAuth = () => {
       if (error || !data.user) {
         // Redirect ke halaman login jika belum login
         router.push('/login');
+      } else {
+        router.push('/');
       }
     };
 
