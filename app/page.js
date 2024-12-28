@@ -1,12 +1,12 @@
 'use client';
-import { useState } from 'react'; // Import useState
+import { useState } from 'react';
 import Navbar from '@/components/navbar';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function Home() {
   useAuth();
-  const [isOpenBars, setIsOpenBars] = useState(false); // Declare state here
+  const [isOpenBars, setIsOpenBars] = useState(false);
 
   const route = useRouter();
   const handleLogin = () => {
@@ -20,8 +20,7 @@ export default function Home() {
         }}
         className="h-screen text-white bg-no-repeat bg-cover"
       >
-        <Navbar isOpenBars={isOpenBars} setIsOpenBars={setIsOpenBars} />{' '}
-        {/* Pass state to Navbar */}
+        <Navbar isOpenBars={isOpenBars} setIsOpenBars={setIsOpenBars} />
         <div className="sm:justify-between items-center sm:flex-row flex flex-col sm:p-[5rem] p-8">
           <div
             className={`flex ${

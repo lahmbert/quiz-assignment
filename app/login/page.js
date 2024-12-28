@@ -28,7 +28,7 @@ export default function Login() {
     if (error) {
       setErrorMessage('Login failed: ' + error.message);
     } else {
-      router.push('/'); // Ganti ke halaman yang sesuai
+      router.push('/');
     }
   };
 

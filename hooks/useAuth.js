@@ -10,7 +10,6 @@ export const useAuth = () => {
       const { data, error } = await supabase.auth.getUser();
 
       if (error || !data.user) {
-        // Redirect ke halaman login jika belum login
         router.push('/login');
       } else {
         router.push('/');

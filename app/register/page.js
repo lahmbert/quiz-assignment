@@ -3,7 +3,7 @@
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import bcrypt from 'bcryptjs'; // Import bcrypt
+import bcrypt from 'bcryptjs';
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -22,13 +22,11 @@ export default function Register() {
       return;
     }
 
-    // Enkripsi password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Pendaftaran dengan Supabase Auth
     const { user, error: authError } = await supabase.auth.signUp({
       email,
-      password: hashedPassword, // Gunakan password yang sudah terenkripsi
+      password: hashedPassword,
     });
 
     if (authError) {
@@ -37,16 +35,13 @@ export default function Register() {
       return;
     }
 
-    // Insert data pengguna ke tabel users setelah registrasi
-    const { error: dbError } = await supabase
-      .from('users') // Gunakan nama tabel yang benar
-      .insert([
-        {
-          email,
-          full_name: fullName,
-          password: hashedPassword, // Simpan password yang terenkripsi
-        },
-      ]);
+    const { error: dbError } = await supabase.from('users').insert([
+      {
+        email,
+        full_name: fullName,
+        password: hashedPassword,
+      },
+    ]);
 
     if (dbError) {
       setErrorMessage(dbError.message);
