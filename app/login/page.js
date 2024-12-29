@@ -10,6 +10,7 @@ export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // Added state for success message
 
   const handleLoginUser = async (e) => {
     e.preventDefault();
@@ -25,8 +26,10 @@ export default function Login() {
 
     if (error) {
       setErrorMessage('Login failed: ' + error.message);
+      setSuccessMessage(''); // Clear success message if there's an error
     } else {
-      router.push('/');
+      setSuccessMessage('Please check your email for the login link.'); // Success message
+      setErrorMessage(''); // Clear any existing error messages
     }
   };
 
@@ -48,6 +51,9 @@ export default function Login() {
             </div>
             {errorMessage && (
               <p className="text-red-500 py-2">{errorMessage}</p>
+            )}
+            {successMessage && (
+              <p className="text-green-500 py-2">{successMessage}</p> // Show success message
             )}
             <form
               onSubmit={handleLoginUser}
