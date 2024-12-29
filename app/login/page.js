@@ -65,29 +65,6 @@ export default function Login() {
                   placeholder="Input your email!"
                 />
               </div>
-              <div className="flex flex-col">
-                <label htmlFor="password">Password</label>
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="ml-1 mt-2 p-1 border border-slate-400 focus:outline-none rounded-sm"
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Input your password!"
-                  required
-                />
-              </div>
-              <div className="flex justify-between gap-3 px-3">
-                <div className="flex items-center gap-1">
-                  <input type="checkbox" name="remember" id="remember" />
-                  <label htmlFor="remember">Remember Me</label>
-                </div>
-                <div>
-                  <span className="cursor-pointer text-blue-500">
-                    Forgot password?
-                  </span>
-                </div>
-              </div>
               <div className="py-2">
                 <button
                   type="submit"
