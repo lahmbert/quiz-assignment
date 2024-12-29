@@ -21,7 +21,6 @@ export default function ManageQuiz() {
     checkUser();
   }, [router]);
 
-  const [title, setTitle] = useState('');
   const [questions, setQuestions] = useState([
     { questions: '', answer: ['', '', '', ''], correctAnswer: 0 },
   ]);
@@ -35,32 +34,12 @@ export default function ManageQuiz() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Inserting quiz with title:', title);
+    console.log('Inserting questions and answers');
 
-    // Insert quiz data first
-    const { data: quiz, error } = await supabase
-      .from('quizzes')
-      .insert([{ title }])
-      .single();
-
-    if (error) {
-      console.error('Error inserting quiz:', error);
-      return;
-    }
-
-    console.log('Quiz inserted:', quiz);
-
-    if (!quiz || !quiz.id) {
-      console.error('Quiz insertion failed: No quiz id returned.');
-      return;
-    }
-
-    // Proceed with questions insertion (if quiz is successfully inserted)
     for (const q of questions) {
-      // Insert question with quiz ID
       const { data: question, error: questionError } = await supabase
         .from('questions')
-        .insert([{ quiz_id: quiz.id, question_text: q.questions }])
+        .insert([{ question_text: q.questions }])
         .single();
 
       if (questionError) {
@@ -68,9 +47,29 @@ export default function ManageQuiz() {
         return;
       }
 
-      // Insert answers for each question
+      console.log('Question inserted:', question);
+
+      const { data: fetchedQuestion, error: fetchError } = await supabase
+        .from('questions')
+        .select('id')
+        .eq('question_text', q.questions)
+        .single();
+
+      if (fetchError) {
+        console.error('Error fetching question by text:', fetchError);
+        return;
+      }
+
+      if (!fetchedQuestion || !fetchedQuestion.id) {
+        console.error('Failed to fetch question id after insert.');
+        return;
+      }
+
+      const questionId = fetchedQuestion.id;
+      console.log('Fetched question id:', questionId);
+
       const answersData = q.answer.map((answer, index) => ({
-        question_id: question.id,
+        question_id: questionId,
         answer_text: answer,
         is_correct: index === q.correctAnswer,
       }));
@@ -85,11 +84,10 @@ export default function ManageQuiz() {
       }
     }
 
-    // Optionally, clear the form after submitting
-    setTitle('');
     setQuestions([
       { questions: '', answer: ['', '', '', ''], correctAnswer: 0 },
     ]);
+    router.push('/list-quiz');
   };
 
   const [isOpenBars, setIsOpenBars] = useState(false);
@@ -102,24 +100,13 @@ export default function ManageQuiz() {
         } justify-center mb-16 text-center flex`}
       >
         <div className="sm:w-[40rem] mx-4 p-8 bg-slate-50 rounded-md flex flex-col shadow-lg sm:p-[3rem]">
-          <div className="text-2xl font-bold">Manage Quiz</div>
+          <div className="text-2xl font-bold">Manage Questions</div>
           <div className="sm:mt-10">
             <form onSubmit={handleSubmit} className="w-full text-start">
-              <div className="flex w-full flex-col gap-2">
-                <label htmlFor="quiz-title">Quiz Title</label>
-                <input
-                  name="quiz-title"
-                  id="quiz-title"
-                  onChange={(e) => setTitle(e.target.value)}
-                  value={title}
-                  required
-                  className="p-1 ml-1 rounded-md focus:outline-none border"
-                />
-              </div>
               {questions.map((q, index) => (
                 <div className="w-full" key={index}>
                   <div className="flex w-full flex-col py-4 gap-2">
-                    <label htmlFor="questions">Questions</label>
+                    <label htmlFor="questions">Question</label>
                     <input
                       className="focus:outline-none border rounded-md p-1 ml-1"
                       type="text"
@@ -179,13 +166,13 @@ export default function ManageQuiz() {
                   type="button"
                   onClick={handleAddQuestions}
                 >
-                  Add Questions
+                  Add Question
                 </button>
                 <button
                   className="p-1 px-2 rounded-md bg-gradient-to-bl from-green-500 to-lime-500 hover:-translate-y-1 duration-300 shadow-md text-white font-medium"
                   type="submit"
                 >
-                  Create Quiz
+                  Submit
                 </button>
               </div>
             </form>

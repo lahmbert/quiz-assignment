@@ -52,8 +52,8 @@ export default function Navbar({ isOpenBars, setIsOpenBars }) {
           <div className={`cursor-pointer ${getActiveClass('/take-quiz')}`}>
             <Link href="/take-quiz">Take Quiz</Link>
           </div>
-          <div className={`cursor-pointer ${getActiveClass('/manage-quiz')}`}>
-            <Link href="/manage-quiz">Manage Quiz</Link>
+          <div className={`cursor-pointer ${getActiveClass('/list-quiz')}`}>
+            <Link href="/list-quiz">List Quiz</Link>
           </div>
           <div>
             <button
@@ -81,8 +81,8 @@ export default function Navbar({ isOpenBars, setIsOpenBars }) {
         <div className={`cursor-pointer ${getActiveClass('/take-quiz')}`}>
           <Link href="/take-quiz">Take Quiz</Link>
         </div>
-        <div className={`cursor-pointer ${getActiveClass('/manage-quiz')}`}>
-          <Link href="/manage-quiz">Manage Quiz</Link>
+        <div className={`cursor-pointer ${getActiveClass('/list-quiz')}`}>
+          <Link href="/list-quiz">List Quiz</Link>
         </div>
         <div className="w-full text-center pt-2">
           <button
