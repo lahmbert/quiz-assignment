@@ -9,14 +9,13 @@ export default function Login() {
   useAuth();
   const router = useRouter();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleLoginUser = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setErrorMessage('Please fill in both email and password.');
+    if (!email) {
+      setErrorMessage('Please fill your email!');
       return;
     }
 
