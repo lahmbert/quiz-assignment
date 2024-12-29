@@ -3,13 +3,10 @@
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import bcrypt from 'bcryptjs';
 
 export default function Register() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [rePassword, setRePassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
@@ -22,11 +19,8 @@ export default function Register() {
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const { user, error: authError } = await supabase.auth.signUp({
       email,
-      password: hashedPassword,
     });
 
     if (authError) {
@@ -39,13 +33,11 @@ export default function Register() {
       {
         email,
         full_name: fullName,
-        password: hashedPassword,
       },
     ]);
 
     if (dbError) {
-      setErrorMessage(dbError.message);
-      console.error(dbError);
+      setErrorMessage('Register Gagal. Periksa kembali!');
     } else {
       router.push('/login');
     }
@@ -70,7 +62,9 @@ export default function Register() {
               <span className="text-2xl font-semibold">Logo</span>
               <p className="text-sm py-1">Silahkan Daftar untuk Memulai!</p>
             </div>
-            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+            {errorMessage && (
+              <p className="py-2 text-red-500">{errorMessage}</p>
+            )}
             <form
               onSubmit={handleRegisterUser}
               className="flex flex-col w-full gap-6 text-start text-sm"
@@ -98,32 +92,6 @@ export default function Register() {
                   name="email"
                   id="email"
                   placeholder="Input your email!"
-                  required
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="password">Password</label>
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                  className="ml-1 mt-2 p-1 border border-slate-400 focus:outline-none rounded-sm"
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Input your password!"
-                  required
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="r-password">Retype Password</label>
-                <input
-                  onChange={(e) => setRePassword(e.target.value)}
-                  value={rePassword}
-                  className="ml-1 mt-2 p-1 border border-slate-400 focus:outline-none rounded-sm"
-                  type="password"
-                  name="r-password"
-                  id="r-password"
-                  placeholder="Input your password again!"
                   required
                 />
               </div>

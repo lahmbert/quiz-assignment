@@ -20,9 +20,8 @@ export default function Login() {
       return;
     }
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
     });
 
     if (error) {
