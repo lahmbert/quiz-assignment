@@ -48,7 +48,9 @@ export default function Login() {
               <span className="text-2xl font-semibold">Logo</span>
               <p className="text-sm py-1">Silahkan Login untuk Memulai!</p>
             </div>
-            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+            {errorMessage && (
+              <p className="text-red-500 py-2">{errorMessage}</p>
+            )}
             <form
               onSubmit={handleLoginUser}
               className="flex flex-col gap-6 text-start text-sm"
